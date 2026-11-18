@@ -1,0 +1,60 @@
+# Task 04 Project Report
+## Supervised Classification / Regression Modeling & Tuning
+
+### 1. Objective
+Build and compare at least four supervised classification models, optimize their hyperparameters with GridSearchCV and stratified 5-fold cross-validation, evaluate performance, and serialize the best model.
+
+### 2. Dataset
+The project uses the Wisconsin Diagnostic Breast Cancer dataset bundled with scikit-learn. It contains 569 observations and 30 numeric input features. The target is binary: malignant or benign. An 80/20 stratified train-test split was used (training: 455, test: 114).
+
+### 3. Preprocessing and leakage prevention
+Median imputation is included in every pipeline. Standard scaling is applied to Logistic Regression. All preprocessing is fitted within each cross-validation training fold because it is part of the scikit-learn Pipeline. This prevents validation/test information from influencing preprocessing.
+
+### 4. Models and tuning
+Four architectures were compared:
+- Logistic Regression
+- Random Forest
+- Gradient Boosting
+- Extra Trees
+
+GridSearchCV used StratifiedKFold with 5 folds, shuffling, random_state=42, and ROC-AUC as the optimization metric.
+
+### 5. Evaluation
+The held-out test set was used to calculate accuracy, precision, recall, F1-score, ROC-AUC, and the confusion matrix. The champion was selected using the highest mean cross-validation ROC-AUC.
+
+Champion model: **Logistic Regression**
+
+Best cross-validation ROC-AUC: **0.9959**
+
+Test accuracy: **0.9825**
+
+Test precision: **0.9861**
+
+Test recall: **0.9861**
+
+Test F1-score: **0.9861**
+
+Test ROC-AUC: **0.9954**
+
+Best parameters: `{'model__C': 1.0}`
+
+### 6. Model comparison
+| Model               |   Best CV ROC-AUC |   Test Accuracy |   Precision |   Recall |   F1-Score |   Test ROC-AUC |
+|:--------------------|------------------:|----------------:|------------:|---------:|-----------:|---------------:|
+| Logistic Regression |          0.995872 |        0.982456 |    0.986111 | 0.986111 |   0.986111 |       0.99537  |
+| Extra Trees         |          0.994221 |        0.95614  |    0.958904 | 0.972222 |   0.965517 |       0.99289  |
+| Gradient Boosting   |          0.992879 |        0.95614  |    0.946667 | 0.986111 |   0.965986 |       0.988757 |
+| Random Forest       |          0.99226  |        0.947368 |    0.958333 | 0.958333 |   0.958333 |       0.993717 |
+
+### 7. Deliverables
+- `Task_04_Supervised_Modeling.ipynb` â€” complete Jupyter Notebook
+- `task04_modeling.py` â€” standalone Python implementation
+- `champion_model.pkl` â€” serialized preprocessing + champion model pipeline
+- `model_comparison.csv` â€” model comparison metrics
+- `roc_curves.png` â€” ROC curve comparison
+- `confusion_matrix.png` â€” champion model confusion matrix
+
+### 8. Conclusion
+Four supervised classifiers were tuned and evaluated. The model with the best cross-validation ROC-AUC was selected as the champion. The preprocessing steps were encapsulated in pipelines to prevent data leakage. The saved model can be loaded with joblib and used with the same feature columns as the training dataset.
+
+**Disclaimer:** This is an educational classification project and must not be used for medical diagnosis.
